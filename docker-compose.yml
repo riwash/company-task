@@ -1,0 +1,22 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    environment:
+      DATABASE_URL: sqlite:////data/patients.db
+      FRONTEND_ORIGINS: http://localhost:4200
+    volumes:
+      - patient-data:/data
+    ports:
+      - "5000:5000"
+
+  frontend:
+    build:
+      context: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "4200:80"
+
+volumes:
+  patient-data:

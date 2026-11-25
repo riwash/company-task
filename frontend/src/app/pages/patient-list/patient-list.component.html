@@ -1,0 +1,156 @@
+<header class="page-heading">
+  <div>
+    <h1>Patients</h1>
+    <p>Review and manage patient checkups.</p>
+  </div>
+  <a class="btn btn-primary" routerLink="/patients/new">Add patient</a>
+</header>
+
+<section class="surface-card list-panel">
+  <div class="list-toolbar">
+    <label class="search-control">
+      <span class="visually-hidden">Search by patient name or notes</span>
+      <span aria-hidden="true">⌕</span>
+      <input
+        class="form-control"
+        type="search"
+        placeholder="Search name or notes"
+        [formControl]="searchControl"
+      />
+    </label>
+    <div class="btn-group layout-toggle" role="group" aria-label="Patient layout">
+      <button
+        class="btn btn-sm"
+        [class.btn-primary]="layout === 'table'"
+        [class.btn-outline-secondary]="layout !== 'table'"
+        type="button"
+        [attr.aria-pressed]="layout === 'table'"
+        (click)="setLayout('table')"
+      >
+        Table
+      </button>
+      <button
+        class="btn btn-sm"
+        [class.btn-primary]="layout === 'cards'"
+        [class.btn-outline-secondary]="layout !== 'cards'"
+        type="button"
+        [attr.aria-pressed]="layout === 'cards'"
+        (click)="setLayout('cards')"
+      >
+        Cards
+      </button>
+    </div>
+  </div>
+
+  @if (loading) {
+    <div class="empty-state" role="status">
+      <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+      Loading patients…
+    </div>
+  } @else if (errorMessage) {
+    <div class="error-panel m-3" role="alert">
+      <p class="mb-3">{{ errorMessage }}</p>
+      <button class="btn btn-outline-danger btn-sm" type="button" (click)="retry()">Try again</button>
+    </div>
+  } @else if (filteredPatients.length === 0) {
+    <div class="empty-state">
+      <h2 class="h5 text-dark">{{ search ? 'No matching patients' : 'No patients yet' }}</h2>
+      <p class="mb-0">{{ search ? 'Try another name or note.' : 'Add a patient to get started.' }}</p>
+    </div>
+  } @else {
+    @if (layout === 'table') {
+      <div class="table-responsive">
+        <table class="table patient-table align-middle mb-0">
+          <thead>
+            <tr>
+              <th scope="col">Patient</th>
+              <th class="age-column" scope="col">Age</th>
+              <th class="check-date-column" scope="col">Check date</th>
+              <th class="blood-group-column" scope="col">Blood group</th>
+              <th class="status-column" scope="col">Status</th>
+              <th class="action-heading" scope="col">
+                <span class="visually-hidden">Details</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (patient of visiblePatients; track patient.id) {
+              <tr>
+                <td>
+                  <a class="patient-name" [routerLink]="['/patients', patient.id]" [queryParams]="listQuery">
+                    {{ patient.name || 'Unnamed patient' }}
+                  </a>
+                  <div class="patient-notes">{{ patient.notes || 'No notes' }}</div>
+                </td>
+                <td class="age-column">{{ patient.age }}</td>
+                <td class="check-date-column">{{ patient.check_datetime + 'Z' | date: 'mediumDate' }}</td>
+                <td class="blood-group-column">{{ patient.blood_group || '—' }}</td>
+                <td class="status-column">
+                  <span class="status-badge" [ngClass]="'status-' + patient.status.toLowerCase()">
+                    {{ patient.status }}
+                  </span>
+                </td>
+                <td class="action-cell">
+                  <a
+                    class="detail-action"
+                    [routerLink]="['/patients', patient.id]"
+                    [queryParams]="listQuery"
+                    [attr.aria-label]="'View details for ' + (patient.name || 'unnamed patient')"
+                    title="View details"
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        d="M2.5 12s3.4-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.4 6.5-9.5 6.5S2.5 12 2.5 12Z"
+                      />
+                      <circle cx="12" cy="12" r="2.7" />
+                    </svg>
+                  </a>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <div class="patient-grid">
+        @for (patient of visiblePatients; track patient.id) {
+          <a
+            class="patient-card"
+            [routerLink]="['/patients', patient.id]"
+            [queryParams]="listQuery"
+          >
+            <div class="d-flex justify-content-between align-items-start gap-2">
+              <div>
+                <h2 class="h6 mb-1">{{ patient.name || 'Unnamed patient' }}</h2>
+                <span class="text-secondary small">Age {{ patient.age }}</span>
+              </div>
+              <span class="status-badge" [ngClass]="'status-' + patient.status.toLowerCase()">
+                {{ patient.status }}
+              </span>
+            </div>
+            <p class="card-notes">{{ patient.notes || 'No notes added.' }}</p>
+            <div class="card-meta">
+              <span>{{ patient.check_datetime + 'Z' | date: 'mediumDate' }}</span>
+              <span>{{ patient.blood_group || 'Blood group not set' }}</span>
+            </div>
+          </a>
+        }
+      </div>
+    }
+
+    <div class="pagination-wrap">
+      <span class="small text-secondary">
+        Showing {{ visiblePatients.length }} of {{ filteredPatients.length }} patients
+      </span>
+      <ngb-pagination
+        [collectionSize]="filteredPatients.length"
+        [pageSize]="pageSize"
+        [page]="page"
+        (pageChange)="setPage($event)"
+        aria-label="Patient pages"
+        [boundaryLinks]="true"
+        [maxSize]="3"
+      />
+    </div>
+  }
+</section>

@@ -1,0 +1,97 @@
+<header class="page-heading">
+  <div>
+    <h1>{{ patientId === null ? 'Add patient' : 'Edit patient' }}</h1>
+    <p>Enter the patient details for their checkup.</p>
+  </div>
+  <a class="btn btn-outline-secondary" routerLink="/patients" [queryParams]="listQuery">Cancel</a>
+</header>
+
+@if (loading) {
+  <div class="surface-card empty-state" role="status">
+    <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+    Loading patient…
+  </div>
+} @else {
+  @if (errorMessage) {
+    <div class="error-panel mb-3" role="alert">{{ errorMessage }}</div>
+  }
+
+  <form class="surface-card patient-form" [formGroup]="patientForm" (ngSubmit)="submit()">
+    <div class="form-intro">
+      <h2 class="h6 mb-1">Patient details</h2>
+      <p class="mb-0">Status is evaluated and returned by the API after saving.</p>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-7">
+        <label class="form-label" for="patient-name">Name</label>
+        <input
+          class="form-control"
+          id="patient-name"
+          type="text"
+          formControlName="name"
+          autocomplete="name"
+          aria-describedby="name-hint"
+        />
+        <div class="form-text" id="name-hint">A blank or invalid name is saved with status Failed.</div>
+      </div>
+      <div class="col-md-5">
+        <label class="form-label" for="patient-age">Age <span class="required-mark">*</span></label>
+        <input
+          class="form-control"
+          id="patient-age"
+          type="number"
+          step="1"
+          formControlName="age"
+          [class.is-invalid]="patientForm.controls.age.touched && patientForm.controls.age.invalid"
+        />
+        @if (patientForm.controls.age.touched && patientForm.controls.age.hasError('required')) {
+          <div class="invalid-feedback">Age is required.</div>
+        } @else if (patientForm.controls.age.touched && patientForm.controls.age.hasError('integer')) {
+          <div class="invalid-feedback">Enter a whole number.</div>
+        }
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="check-datetime">
+          Check date and time <span class="required-mark">*</span>
+        </label>
+        <input
+          class="form-control"
+          id="check-datetime"
+          type="datetime-local"
+          formControlName="check_datetime"
+          [class.is-invalid]="patientForm.controls.check_datetime.touched && patientForm.controls.check_datetime.invalid"
+        />
+        @if (patientForm.controls.check_datetime.touched && patientForm.controls.check_datetime.invalid) {
+          <div class="invalid-feedback">Check date and time is required.</div>
+        }
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="blood-group">Blood group</label>
+        <select class="form-select" id="blood-group" formControlName="blood_group">
+          <option value="">Not provided</option>
+          @for (group of bloodGroups; track group) {
+            <option [value]="group">{{ group }}</option>
+          }
+        </select>
+      </div>
+      <div class="col-12">
+        <label class="form-label" for="patient-notes">Notes</label>
+        <textarea
+          class="form-control"
+          id="patient-notes"
+          rows="4"
+          formControlName="notes"
+          placeholder="Add relevant notes for the patient"
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a class="btn btn-light" routerLink="/patients" [queryParams]="listQuery">Cancel</a>
+      <button class="btn btn-primary" type="submit" [disabled]="saving">
+        {{ saving ? 'Saving…' : patientId === null ? 'Create patient' : 'Save changes' }}
+      </button>
+    </div>
+  </form>
+}

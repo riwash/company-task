@@ -1,0 +1,24 @@
+<nav class="navbar navbar-expand-lg app-navbar">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/patients">CareTrack <span>Patients</span></a>
+    <div class="d-flex align-items-center gap-3 ms-auto">
+      @if (statusCounts$ | async; as counts) {
+        <div class="status-summary" aria-label="Patient status summary">
+          <span><i class="summary-dot pending"></i>Pending <strong>{{ counts.Pending }}</strong></span>
+          <span><i class="summary-dot checked"></i>Checked <strong>{{ counts.Checked }}</strong></span>
+          <span><i class="summary-dot failed"></i>Failed <strong>{{ counts.Failed }}</strong></span>
+        </div>
+      }
+      <a class="btn btn-primary btn-sm" routerLink="/patients/new">Add patient</a>
+    </div>
+  </div>
+</nav>
+<main class="container app-content">
+  @if (summaryError) {
+    <div class="alert alert-warning d-flex align-items-center justify-content-between gap-3" role="alert">
+      <span>{{ summaryError }}</span>
+      <button class="btn btn-sm btn-outline-secondary" type="button" (click)="loadSummary()">Retry</button>
+    </div>
+  }
+  <router-outlet />
+</main>

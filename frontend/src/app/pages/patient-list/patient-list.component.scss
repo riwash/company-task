@@ -1,0 +1,247 @@
+.list-panel {
+  overflow: hidden;
+}
+
+.list-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.15rem;
+  border-bottom: 1px solid #e8edf2;
+}
+
+.search-control {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: min(100%, 22rem);
+  color: #8292a1;
+
+  span[aria-hidden='true'] {
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+
+  .form-control {
+    border-color: #e3eaf0;
+  }
+}
+
+.patient-table {
+  min-width: 44rem;
+
+  th {
+    padding: 0.85rem 1.15rem;
+    border-bottom-color: #e8edf2;
+    background: #f9fbfc;
+    color: #718293;
+    font-size: 0.74rem;
+    font-weight: 650;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 1rem 1.15rem;
+    border-color: #edf1f4;
+    color: #40576b;
+    font-size: 0.88rem;
+    white-space: nowrap;
+  }
+
+  tbody tr:hover {
+    background: #fbfdff;
+  }
+}
+
+.action-heading {
+  width: 3.5rem;
+  text-align: center;
+}
+
+.action-cell {
+  width: 3.5rem;
+  text-align: center;
+}
+
+.detail-action {
+  display: inline-flex;
+  width: 2.25rem;
+  height: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  color: #54738e;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+
+  svg {
+    width: 1.15rem;
+    height: 1.15rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.7;
+  }
+
+  &:hover,
+  &:focus-visible {
+    border-color: #d7e5f0;
+    background: #edf5fb;
+    color: #1d5e91;
+  }
+}
+
+.patient-name {
+  color: #1d4e79;
+  font-weight: 650;
+}
+
+.patient-notes {
+  max-width: 20rem;
+  overflow: hidden;
+  color: #8391a0;
+  font-size: 0.76rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.patient-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: 1rem;
+  padding: 1.15rem;
+}
+
+.patient-card {
+  display: block;
+  min-width: 0;
+  border: 1px solid #e8edf2;
+  border-radius: 0.7rem;
+  padding: 1rem;
+  color: inherit;
+  transition:
+    border-color 120ms ease,
+    transform 120ms ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: #aac3d9;
+  }
+
+  h2 {
+    color: #1d4e79;
+  }
+}
+
+.card-notes {
+  min-height: 2.8rem;
+  margin: 1rem 0;
+  color: #718293;
+  font-size: 0.84rem;
+}
+
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: #627588;
+  font-size: 0.75rem;
+}
+
+.pagination-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1.15rem;
+  border-top: 1px solid #e8edf2;
+}
+
+:host ::ng-deep ngb-pagination .pagination {
+  margin-bottom: 0;
+}
+
+@media (max-width: 575px) {
+  .list-toolbar,
+  .pagination-wrap {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .search-control {
+    width: 100%;
+  }
+
+  .layout-toggle {
+    align-self: flex-end;
+  }
+
+  .patient-grid {
+    grid-template-columns: 1fr;
+    padding: 0.85rem;
+  }
+
+  .card-meta {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .patient-table {
+    width: 100%;
+    min-width: 0;
+    table-layout: fixed;
+
+    th,
+    td {
+      padding: 0.75rem 0.5rem;
+      white-space: normal;
+    }
+
+    .age-column {
+      width: 3rem;
+    }
+
+    .check-date-column {
+      width: 6rem;
+    }
+
+    .blood-group-column {
+      width: 5.25rem;
+    }
+
+    .status-column {
+      width: 6rem;
+    }
+  }
+
+  .action-heading,
+  .action-cell {
+    width: 3rem;
+  }
+
+  .patient-name {
+    overflow-wrap: anywhere;
+  }
+
+  .patient-notes {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .patient-table {
+    .age-column,
+    .check-date-column,
+    .blood-group-column {
+      display: none;
+    }
+  }
+}

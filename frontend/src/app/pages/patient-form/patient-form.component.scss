@@ -1,0 +1,27 @@
+.patient-form {
+  padding: clamp(1.2rem, 4vw, 2rem);
+}
+
+.form-intro {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid #e8edf2;
+
+  h2 {
+    color: #244966;
+  }
+
+  p {
+    color: #718293;
+    font-size: 0.85rem;
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #e8edf2;
+}

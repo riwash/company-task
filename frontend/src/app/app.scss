@@ -1,0 +1,80 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.app-navbar {
+  background: #fff;
+  border-bottom: 1px solid #e8edf2;
+  box-shadow: 0 2px 12px rgb(22 46 72 / 4%);
+}
+
+.navbar-brand {
+  color: #173b5e;
+  font-size: 1.2rem;
+  font-weight: 750;
+  letter-spacing: -0.03em;
+
+  span {
+    color: #6b7e90;
+    font-size: 0.86rem;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+}
+
+.status-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  color: #516477;
+  font-size: 0.76rem;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  strong {
+    color: #20394f;
+  }
+}
+
+.summary-dot {
+  width: 0.48rem;
+  height: 0.48rem;
+  border-radius: 50%;
+}
+
+.pending {
+  background: #d99727;
+}
+
+.checked {
+  background: #29956f;
+}
+
+.failed {
+  background: #d35454;
+}
+
+.app-content {
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+}
+
+@media (max-width: 575px) {
+  .status-summary {
+    gap: 0.55rem;
+    font-size: 0.67rem;
+  }
+
+  .navbar-brand span {
+    display: none;
+  }
+
+  .app-content {
+    padding-top: 1.25rem;
+  }
+}

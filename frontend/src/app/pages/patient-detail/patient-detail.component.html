@@ -1,0 +1,84 @@
+<div class="detail-topline">
+  <button class="btn btn-link px-0" type="button" (click)="backToList()">← Back to list</button>
+  @if (patient; as currentPatient) {
+    <div class="d-flex gap-2">
+      <a
+        class="btn btn-outline-secondary"
+        [routerLink]="['/patients', currentPatient.id, 'edit']"
+        [queryParams]="listQuery"
+      >
+        Edit patient
+      </a>
+      <button class="btn btn-outline-danger" type="button" [disabled]="deleting" (click)="deletePatient()">
+        {{ deleting ? 'Deleting…' : 'Delete' }}
+      </button>
+    </div>
+  }
+</div>
+
+@if (savedMessage) {
+  <div class="alert alert-success" role="status">{{ savedMessage }}</div>
+}
+
+@if (loading) {
+  <div class="surface-card empty-state" role="status">
+    <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+    Loading patient…
+  </div>
+} @else if (notFound) {
+  <section class="surface-card empty-state">
+    <h1 class="h4 text-dark">Patient not found</h1>
+    <p>The patient may have been deleted or the link may be incorrect.</p>
+    <button class="btn btn-primary" type="button" (click)="backToList()">Return to patients</button>
+  </section>
+} @else if (errorMessage) {
+  <div class="error-panel" role="alert">{{ errorMessage }}</div>
+} @else if (patient; as currentPatient) {
+  <header class="page-heading">
+    <div>
+      <h1>{{ currentPatient.name || 'Unnamed patient' }}</h1>
+      <p>Patient record #{{ currentPatient.id }}</p>
+    </div>
+    <span class="status-badge" [ngClass]="'status-' + currentPatient.status.toLowerCase()">
+      {{ currentPatient.status }}
+    </span>
+  </header>
+
+  <section class="surface-card detail-card" aria-label="Patient information">
+    <h2 class="h6 detail-section-title">Patient information</h2>
+    <dl class="detail-grid">
+      <div>
+        <dt>Full name</dt>
+        <dd>{{ currentPatient.name || '—' }}</dd>
+      </div>
+      <div>
+        <dt>Age</dt>
+        <dd>{{ currentPatient.age }}</dd>
+      </div>
+      <div>
+        <dt>Blood group</dt>
+        <dd>{{ currentPatient.blood_group || 'Not provided' }}</dd>
+      </div>
+      <div>
+        <dt>Check date and time</dt>
+        <dd>{{ currentPatient.check_datetime + 'Z' | date: 'medium':'UTC' }} UTC</dd>
+      </div>
+      <div class="notes-field">
+        <dt>Notes</dt>
+        <dd>{{ currentPatient.notes || 'No notes added.' }}</dd>
+      </div>
+    </dl>
+
+    <h2 class="h6 detail-section-title audit-title">Record history</h2>
+    <dl class="detail-grid">
+      <div>
+        <dt>Created</dt>
+        <dd>{{ currentPatient.created_at + 'Z' | date: 'medium':'UTC' }} UTC</dd>
+      </div>
+      <div>
+        <dt>Last updated</dt>
+        <dd>{{ currentPatient.updated_at + 'Z' | date: 'medium':'UTC' }} UTC</dd>
+      </div>
+    </dl>
+  </section>
+}
